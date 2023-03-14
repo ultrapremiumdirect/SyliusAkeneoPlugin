@@ -166,14 +166,14 @@ abstract class AbstractProcessTask implements AkeneoTaskInterface
             $this->handleByCursor($payload, $handleType, $count, $ids);
         }
 
-        if ($count > 0 && $payload->isBatchingAllowed() && $payload->getProcessAsSoonAsPossible()) {
+        if (count($ids) > 0 && $payload->isBatchingAllowed() && $payload->getProcessAsSoonAsPossible()) {
             $this->logger->notice('Batching', ['from_id' => $ids[0], 'to_id' => $ids[(is_countable($ids) ? \count($ids) : 0) - 1]]);
             $this->batch($payload, $ids);
 
             return;
         }
 
-        if ($count > 0 && !$payload->isBatchingAllowed()) {
+        if (count($ids) > 0 && !$payload->isBatchingAllowed()) {
             $payload->setIds($ids);
             $this->task->__invoke($payload);
 
